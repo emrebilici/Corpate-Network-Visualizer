@@ -129,6 +129,15 @@ function createV4SelectableForceDirectedGraph(svg, graph) {
 
                 return thisOpacity;
             });
+
+            ////////////////////buraya sayfanın yanında çıkacak şeyleri ekliyorum
+            document.getElementById("isim").innerHTML = d.value;
+            document.getElementById("country").innerHTML = d.country;
+            document.getElementById("type").innerHTML = d.activity;
+            document.getElementById("kac").innerHTML = d.kackez;
+            document.getElementById("connections").innerHTML = d.baglanti;
+////////////////////
+
             console.log(graph.nodes[0].name);
             link.style("stroke-opacity", function(o) {
 
@@ -138,6 +147,82 @@ function createV4SelectableForceDirectedGraph(svg, graph) {
                 	return opacity;
 
             });
+
+            var node1 = document.createElement("LI");
+
+            
+
+/////partnerleri yazıyor liste halinde
+            graph.links.forEach(function(o){
+                if(o.source == d) {
+                    node1 = document.createElement("LI");
+                    node1.className = "list-group-item";
+////span ekledim. listenin içindeki elemana span elementi ekliyor. aynısını button şeklinde yapabilirsin.
+                    span = document.createElement("span");
+                    span.className = "badge";
+                    span.style="color:orange";
+
+                    var textnode1 = document.createTextNode(o.target.value);
+                    var textnode2 = document.createTextNode(o.weight/2);
+
+                    span.appendChild(textnode2);
+
+                    node1.appendChild(textnode1);
+                    node1.appendChild(span);
+
+                    document.getElementById("myList").appendChild(node1);
+                }
+                if(o.target == d){
+                    node1 = document.createElement("LI");
+                    node1.className = "list-group-item"
+
+                    span = document.createElement("span");
+                    span.className = "badge";
+                    span.style="color: orange";
+
+                    var textnode1 = document.createTextNode(o.source.value);
+                    var textnode2 = document.createTextNode(o.weight/2 );
+
+                    span.appendChild(textnode2);
+
+                    node1.appendChild(textnode1);
+                    node1.appendChild(span);
+
+                    document.getElementById("myList").appendChild(node1);
+                }
+                else{
+                    //document.getElementById("myList").appendChild(node1);
+                }
+            });
+
+            ////sorting the list according to number of the list element.
+            //// **begin with biggest**
+            var list, i, switching, b, shouldSwitch;
+            list = document.getElementById("myList");
+            switching = true;
+
+            while(switching){
+                switching = false;
+                b=list.getElementsByTagName("li");
+
+                for (var i = 0; i < (b.length-1); i++) {
+                    shouldSwitch = false;
+                    if (Number(b[i].lastElementChild.innerHTML) < Number(b[i + 1].lastElementChild.innerHTML)) {
+                        /*if next item is numerically
+                        bigger than current item, mark as a switch
+                        and break the loop:*/
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    /*If a switch has been marked, make the switch
+                    and mark the switch as done:*/
+                    b[i].parentNode.insertBefore(b[i + 1], b[i]);
+                    switching = true;
+                }
+            }
+                    
 
         };
     }
